@@ -1,8 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const Listing = require("./models/listing.js");
 const app = express();
 const path = require("path");
-const Listing = require("./models/listing.js");
 // middlewares
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
