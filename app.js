@@ -37,11 +37,11 @@ app.get("/listings", async (req, res) => {
 
 // Show/Read
 
-// app.get("/listings/:id", async (req, res) => {
-//   const { id } = req.params;
-//   const list = Listing.findById(id);
-//   res.render("show", { list });
-// });
+app.get("/listings/:id", async (req, res) => {
+  const { id } = req.params;
+  const list = await Listing.findById(id);
+  res.render("show", { list });
+});
 
 // Server Connection
 const port = 8080;
