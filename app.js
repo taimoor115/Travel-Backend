@@ -2,11 +2,14 @@ const express = require("express");
 const mongoose = require("mongoose");
 const Listing = require("./models/listing.js");
 const app = express();
+var methodOverride = require("method-override");
 const path = require("path");
 // middlewares
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// override with POST having ?_method=DELETE
+app.use(methodOverride("_method"));
 // Ejs
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -41,14 +44,33 @@ app.get("/listings/new", (req, res) => {
 
 app.post("/listings", async (req, res) => {
   const listing = req.body.listing;
-
   const list = new Listing(listing);
-  console.log(list);
   await list.save();
   res.redirect("/listings");
 });
 
-// Show/Read
+// Edit
+
+app.get("/listings/:id/edit", async (req, res) => {
+  const { id } = req.params;
+  const listing = await Listing.findById(id);
+  console.log(listing);
+  res.render("edit", { listing });
+});
+
+// Update
+app.patch("/listings/:id", async (req, res) => {
+  const { id } = req.params;
+  const listing = req.body.listing;
+
+  await Listing.findByIdAndUpdate(id, listing, {
+    new: true,
+    runValidators: true,
+  });
+  res.redirect("/listings");
+});
+
+// Show / Read
 
 app.get("/listings/:id", async (req, res) => {
   const { id } = req.params;
