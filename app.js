@@ -34,6 +34,19 @@ app.get("/listings", async (req, res) => {
 
   res.render("home", { listing });
 });
+// Create
+app.get("/listings/new", (req, res) => {
+  res.render("new");
+});
+
+app.post("/listings", async (req, res) => {
+  const listing = req.body.listing;
+
+  const list = new Listing(listing);
+  console.log(list);
+  await list.save();
+  res.redirect("/listings");
+});
 
 // Show/Read
 
