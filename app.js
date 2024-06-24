@@ -24,28 +24,24 @@ async function main() {
   await mongoose.connect("mongodb://127.0.0.1:27017/travel");
 }
 // Routes
-app.get("/", (req, res) => {
-  res.send("Server working...");
+app.get("/", async (req, res) => {
+  res.send("Server Working...");
 });
 
-app.get("/listing", (req, res) => {
-  let list1 = new Listing({
-    title: "Sea View",
-    description: "A very beautifull sea view that make you feel happy..",
-    price: 2000,
-    location: "Karakram, Pakistan",
-    country: "Pakistan",
-  });
+// Index
+app.get("/listings", async (req, res) => {
+  const listing = await Listing.find();
 
-  list1
-    .save()
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  res.render("home", { listing });
 });
+
+// Show/Read
+
+// app.get("/listings/:id", async (req, res) => {
+//   const { id } = req.params;
+//   const list = Listing.findById(id);
+//   res.render("show", { list });
+// });
 
 // Server Connection
 const port = 8080;
