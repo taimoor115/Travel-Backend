@@ -1,8 +1,8 @@
 const express = require("express");
-const { default: mongoose } = require("mongoose");
+const mongoose = require("mongoose");
 const app = express();
 const path = require("path");
-
+const Listing = require("./models/listing.js");
 // middlewares
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -26,6 +26,25 @@ async function main() {
 // Routes
 app.get("/", (req, res) => {
   res.send("Server working...");
+});
+
+app.get("/listing", (req, res) => {
+  let list1 = new Listing({
+    title: "Sea View",
+    description: "A very beautifull sea view that make you feel happy..",
+    price: 2000,
+    location: "Karakram, Pakistan",
+    country: "Pakistan",
+  });
+
+  list1
+    .save()
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 // Server Connection
