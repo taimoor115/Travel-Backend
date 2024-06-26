@@ -4,6 +4,7 @@ const Listing = require("./models/listing.js");
 const app = express();
 var methodOverride = require("method-override");
 const path = require("path");
+const ejsMate = require("ejs-mate");
 // middlewares
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -12,7 +13,8 @@ app.use(express.json());
 app.use(methodOverride("_method"));
 // Ejs
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
+app.engine("ejs", ejsMate);
+app.set("views", path.join(__dirname, "views/listing"));
 app.use(express.static(path.join(__dirname, "/public")));
 
 // Db Connection
