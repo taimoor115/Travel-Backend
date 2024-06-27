@@ -2,10 +2,11 @@ const express = require("express");
 const mongoose = require("mongoose");
 const Listing = require("./models/listing.js");
 const app = express();
-var methodOverride = require("method-override");
+const methodOverride = require("method-override");
 const path = require("path");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
+const ExpressError = require("./utils/ExpressError.js");
 
 // middlewares
 app.use(express.urlencoded({ extended: true }));
@@ -31,16 +32,22 @@ async function main() {
   await mongoose.connect("mongodb://127.0.0.1:27017/travel");
 }
 // Routes
-app.get("/", async (req, res) => {
-  res.send("Server Working...");
-});
+app.get(
+  "/",
+  wrapAsync(async (req, res) => {
+    res.send("Server Working...");
+  })
+);
 
 // Index
-app.get("/listings", async (req, res) => {
-  const listing = await Listing.find();
+app.get(
+  "/listings",
+  wrapAsync(async (req, res) => {
+    const listing = await Listing.find();
 
-  res.render("home", { listing });
-});
+    res.render("home", { listing });
+  })
+);
 // Create
 app.get("/listings/new", (req, res) => {
   res.render("new");
@@ -50,6 +57,9 @@ app.post(
   "/listings",
   wrapAsync(async (req, res, next) => {
     const listing = req.body.listing;
+    if (!listing) {
+      throw new ExpressError(400, "Send Valid data for listing");
+    }
     const list = new Listing(listing);
     await list.save();
     res.redirect("/listings");
@@ -58,45 +68,65 @@ app.post(
 
 // Edit
 
-app.get("/listings/:id/edit", async (req, res) => {
-  const { id } = req.params;
-  const listing = await Listing.findById(id);
-  console.log(listing);
-  res.render("edit", { listing });
-});
+app.get(
+  "/listings/:id/edit",
+  wrapAsync(async (req, res) => {
+    const { id } = req.params;
+    const listing = await Listing.findById(id);
+    console.log(listing);
+    res.render("edit", { listing });
+  })
+);
 
 // Update
-app.patch("/listings/:id", async (req, res) => {
-  const { id } = req.params;
-  const listing = req.body.listing;
+app.patch(
+  "/listings/:id",
+  wrapAsync(async (req, res) => {
+    const { id } = req.params;
+    const listing = req.body.listing;
+    if (!listing) {
+      throw new ExpressError(400, "Send Valid data for listing");
+    }
 
-  await Listing.findByIdAndUpdate(id, listing, {
-    new: true,
-    runValidators: true,
-  });
-  res.redirect("/listings");
-});
+    await Listing.findByIdAndUpdate(id, listing, {
+      new: true,
+      runValidators: true,
+    });
+    res.redirect("/listings");
+  })
+);
 
 // Delete
-app.delete("/listings/:id", async (req, res) => {
-  const { id } = req.params;
-  await Listing.findByIdAndDelete(id, { new: true }).then((res) =>
-    console.log(res)
-  );
-  res.redirect("/listings");
-});
+app.delete(
+  "/listings/:id",
+  wrapAsync(async (req, res) => {
+    const { id } = req.params;
+    await Listing.findByIdAndDelete(id, { new: true }).then((res) =>
+      console.log(res)
+    );
+    res.redirect("/listings");
+  })
+);
 
 // Show / Read
 
-app.get("/listings/:id", async (req, res) => {
-  const { id } = req.params;
-  const list = await Listing.findById(id);
-  res.render("show", { list });
-});
+app.get(
+  "/listings/:id",
+  wrapAsync(async (req, res) => {
+    const { id } = req.params;
+    const list = await Listing.findById(id);
+    res.render("show", { list });
+  })
+);
 
 // Error Handler
+app.all("*", (req, res, next) => {
+  next(new ExpressError(404, "Page not found..."));
+});
+
 app.use((err, req, res, next) => {
-  res.send("Something gone wrong...");
+  let { status = 500, message = "Something went wrong..." } = err;
+  res.status(status).send(message);
 });
 
 // Server Connection
