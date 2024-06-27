@@ -5,6 +5,8 @@ const app = express();
 var methodOverride = require("method-override");
 const path = require("path");
 const ejsMate = require("ejs-mate");
+const wrapAsync = require("./utils/wrapAsync.js");
+
 // middlewares
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -44,16 +46,15 @@ app.get("/listings/new", (req, res) => {
   res.render("new");
 });
 
-app.post("/listings", async (req, res, next) => {
-  try {
+app.post(
+  "/listings",
+  wrapAsync(async (req, res, next) => {
     const listing = req.body.listing;
     const list = new Listing(listing);
     await list.save();
     res.redirect("/listings");
-  } catch (error) {
-    next(error);
-  }
-});
+  })
+);
 
 // Edit
 
