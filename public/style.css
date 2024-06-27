@@ -92,3 +92,11 @@ body {
 .font {
   font-size: 40px !important;
 }
+
+.show_img {
+  height: 45vh;
+}
+
+.desc {
+  color: rgb(90, 87, 87) !important;
+}
