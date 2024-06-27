@@ -44,11 +44,15 @@ app.get("/listings/new", (req, res) => {
   res.render("new");
 });
 
-app.post("/listings", async (req, res) => {
-  const listing = req.body.listing;
-  const list = new Listing(listing);
-  await list.save();
-  res.redirect("/listings");
+app.post("/listings", async (req, res, next) => {
+  try {
+    const listing = req.body.listing;
+    const list = new Listing(listing);
+    await list.save();
+    res.redirect("/listings");
+  } catch (error) {
+    next(error);
+  }
 });
 
 // Edit
@@ -87,6 +91,11 @@ app.get("/listings/:id", async (req, res) => {
   const { id } = req.params;
   const list = await Listing.findById(id);
   res.render("show", { list });
+});
+
+// Error Handler
+app.use((err, req, res, next) => {
+  res.send("Something gone wrong...");
 });
 
 // Server Connection
