@@ -3,7 +3,12 @@
   <h3 class="text-danger p-3 font text-center">Edit List</h3>
   <div class="row">
     <div class="col-8 offset-2">
-      <form action="/listings/<%= listing.id %>?_method=PATCH" method="post">
+      <form
+        action="/listings/<%= listing.id %>?_method=PATCH"
+        class="needs-validation"
+        novalidate
+        method="post"
+      >
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
           <input
@@ -14,6 +19,7 @@
             value="<%= listing.title %>"
             class="form-control"
           />
+          <div class="invalid-feedback">Title should be valid</div>
         </div>
         <div class="mb-3">
           <label for="description" class="form-label">Description</label>
@@ -24,9 +30,11 @@
             rows="3"
             cols="20"
             class="form-control"
+            required
           >
 <%= listing.description %></textarea
           >
+          <div class="invalid-feedback">Description should be valid</div>
         </div>
         <div class="mb-3">
           <label for="image" class="form-label">Image</label>
@@ -45,11 +53,13 @@
             <input
               type="number"
               min="1"
+              required
               placeholder="price"
               name="listing[price]"
               value="<%= listing.price %>"
               class="form-control"
             />
+            <div class="invalid-feedback">Price should be valid</div>
           </div>
 
           <div class="col-md-4 mb-3">
@@ -58,20 +68,24 @@
               type="text"
               placeholder="Country"
               name="listing[country]"
+              required
               class="form-control"
               value="<%= listing.country %>"
             />
+            <div class="invalid-feedback">Country should be valid</div>
           </div>
         </div>
         <div class="mb-3">
           <label for="location" class="form-label">Location</label>
           <input
             type="text"
+            required
             placeholder="Add location"
             name="listing[location]"
             value="<%= listing.location %>"
             class="form-control"
           />
+          <div class="invalid-feedback">Location should be valid</div>
         </div>
         <div class="mb-3">
           <button type="submit" class="btn btn-danger p-2">Edit</button>
