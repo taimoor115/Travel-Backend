@@ -32,6 +32,20 @@ main()
 async function main() {
   await mongoose.connect("mongodb://127.0.0.1:27017/travel");
 }
+
+// Validation
+const validateListing = (req, res, next) => {
+  let { error } = schema.validate(req.body);
+
+  console.log(error);
+  if (error) {
+    let errMsg = error.details.map((err) => err.message).join(",");
+    throw new ExpressError(400, errMsg);
+  } else {
+    next();
+  }
+};
+
 // Routes
 app.get(
   "/",
@@ -45,7 +59,6 @@ app.get(
   "/listings",
   wrapAsync(async (req, res) => {
     const listing = await Listing.find();
-
     res.render("home", { listing });
   })
 );
@@ -56,13 +69,9 @@ app.get("/listings/new", (req, res) => {
 
 app.post(
   "/listings",
+  validateListing,
   wrapAsync(async (req, res, next) => {
     const listing = req.body.listing;
-    let result = schema.validate(req.body);
-    console.log(result);
-    if (result.error) {
-      throw new ExpressError(400, result.error);
-    }
     const list = new Listing(listing);
     await list.save();
     res.redirect("/listings");
@@ -84,13 +93,10 @@ app.get(
 // Update
 app.patch(
   "/listings/:id",
+  validateListing,
   wrapAsync(async (req, res) => {
     const { id } = req.params;
     const listing = req.body.listing;
-    if (!listing) {
-      throw new ExpressError(400, "Send Valid data for listing");
-    }
-
     await Listing.findByIdAndUpdate(id, listing, {
       new: true,
       runValidators: true,
