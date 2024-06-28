@@ -53,6 +53,7 @@ const validateReviews = (req, res, next) => {
 
   if (error) {
     let errorMessage = error.details.map((err) => err.message).join(",");
+    console.log("Hello", errorMessage);
     throw new ExpressError(400, errorMessage);
   } else {
     next();
@@ -136,7 +137,8 @@ app.get(
   "/listings/:id",
   wrapAsync(async (req, res) => {
     const { id } = req.params;
-    const list = await Listing.findById(id);
+    const list = await Listing.findById(id).populate("reviews");
+    console.log(list);
     res.render("show", { list });
   })
 );

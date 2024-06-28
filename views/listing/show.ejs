@@ -19,54 +19,64 @@
       <%= list.country %>
     </div>
   </div>
-</div>
 
-<div class="d-flex p-2 col-1 offset-3">
-  <a href="/listings/<%= list._id %>/edit" class="btn btn-dark">Edit</a>
+  <div class="d-flex p-2 col-1 offset-3">
+    <a href="/listings/<%= list._id %>/edit" class="btn btn-dark">Edit</a>
 
-  <div>
-    <form action="/listings/<%= list._id %>?_method=DELETE " method="post">
-      <button type="submit" class="btn btn-outline-danger offset-3">
-        Delete
-      </button>
-    </form>
+    <div>
+      <form action="/listings/<%= list._id %>?_method=DELETE " method="post">
+        <button type="submit" class="btn btn-outline-danger offset-3">
+          Delete
+        </button>
+      </form>
+    </div>
   </div>
-</div>
-<hr />
-<div class="col-8 offset-3">
-  <h4>Leave a comment</h4>
-  <form
-    action="/listings/<%= list.id %>/reviews"
-    method="post"
-    class="needs-validation"
-    novalidate
-  >
-    <div class="mb-3">
-      <label class="form-label" for="rating">Rating</label>
-      <input
-        class="form-control"
-        type="range"
-        min="1"
-        max="5"
-        id="rating"
-        name="review[rating]"
-        required
-      />
-    </div>
-    <div class="mt-3">
-      <label class="form-label" for="comment">Comment</label>
-      <textarea
-        name="review[comment]"
-        id="comment"
-        rows="5"
-        cols="40"
-        class="form-control"
-        required
-      ></textarea>
-      <div class="invalid-feedback">Please add some feedback!</div>
-    </div>
-    <div class="mb-3 mt-3">
-      <button type="submit" class="btn btn-outline-dark">Submit</button>
-    </div>
-  </form>
+
+  <div class="col-8 offset-3">
+    <hr />
+    <h4>Leave a comment</h4>
+    <form
+      action="/listings/<%= list.id %>/reviews"
+      method="post"
+      class="needs-validation"
+      novalidate
+    >
+      <div class="mb-3">
+        <label class="form-label" for="rating">Rating</label>
+        <input
+          class="form-control"
+          type="range"
+          min="1"
+          max="5"
+          id="rating"
+          name="review[rating]"
+          required
+        />
+      </div>
+      <div class="mt-3">
+        <label class="form-label" for="comment">Comment</label>
+        <textarea
+          name="review[comment]"
+          id="comment"
+          rows="5"
+          cols="40"
+          class="form-control"
+          required
+        ></textarea>
+        <div class="invalid-feedback">Please add some feedback!</div>
+      </div>
+      <div class="mb-3 mt-3">
+        <button type="submit" class="btn btn-outline-dark">Submit</button>
+      </div>
+    </form>
+    <hr />
+    <h4>All Reviews</h4>
+    <ul>
+      <%for(let review of list.reviews) { %>
+
+      <li><%= review.comment %> <%= review.rating %>/5</li>
+
+      <% } %>
+    </ul>
+  </div>
 </div>
