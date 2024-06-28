@@ -9,6 +9,7 @@ const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
 const schema = require("./schema.js");
 const Review = require("./models/review.js");
+const reviewSchema = require("./schema.js");
 
 // middlewares
 app.use(express.urlencoded({ extended: true }));
@@ -42,6 +43,17 @@ const validateListing = (req, res, next) => {
   if (error) {
     let errMsg = error.details.map((err) => err.message).join(",");
     throw new ExpressError(400, errMsg);
+  } else {
+    next();
+  }
+};
+
+const validateReviews = (req, res, next) => {
+  let { error } = reviewSchema.validate(req.body);
+
+  if (error) {
+    let errorMessage = error.details.map((err) => err.message).join(",");
+    throw new ExpressError(400, errorMessage);
   } else {
     next();
   }
@@ -131,18 +143,22 @@ app.get(
 
 // Add Reviews
 
-app.post("/listings/:id/reviews", async (req, res) => {
-  const { id } = req.params;
-  console.log(req.body.review);
-  const listing = await Listing.findById(id);
-  const review = new Review(req.body.review);
+app.post(
+  "/listings/:id/reviews",
+  validateReviews,
+  wrapAsync(async (req, res) => {
+    const { id } = req.params;
 
-  listing.reviews.push(review);
-  await review.save();
-  const result = await listing.save();
-  console.log(result);
-  res.redirect(`/listings/${listing._id}`);
-});
+    const listing = await Listing.findById(id);
+    const review = new Review(req.body.review);
+
+    listing.reviews.push(review);
+    await review.save();
+    const result = await listing.save();
+    console.log(result);
+    res.redirect(`/listings/${listing._id}`);
+  })
+);
 
 // Error Handler
 app.all("*", (req, res, next) => {
