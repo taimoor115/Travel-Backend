@@ -7,6 +7,7 @@ const path = require("path");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
+const schema = require("./schema.js");
 
 // middlewares
 app.use(express.urlencoded({ extended: true }));
@@ -57,8 +58,10 @@ app.post(
   "/listings",
   wrapAsync(async (req, res, next) => {
     const listing = req.body.listing;
-    if (!listing) {
-      throw new ExpressError(400, "Send Valid data for listing");
+    let result = schema.validate(req.body);
+    console.log(result);
+    if (result.error) {
+      throw new ExpressError(400, result.error);
     }
     const list = new Listing(listing);
     await list.save();
