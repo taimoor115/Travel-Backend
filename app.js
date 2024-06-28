@@ -8,6 +8,7 @@ const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
 const schema = require("./schema.js");
+const Review = require("./models/review.js");
 
 // middlewares
 app.use(express.urlencoded({ extended: true }));
@@ -127,6 +128,21 @@ app.get(
     res.render("show", { list });
   })
 );
+
+// Add Reviews
+
+app.post("/listings/:id/reviews", async (req, res) => {
+  const { id } = req.params;
+  console.log(req.body.review);
+  const listing = await Listing.findById(id);
+  const review = new Review(req.body.review);
+
+  listing.reviews.push(review);
+  await review.save();
+  const result = await listing.save();
+  console.log(result);
+  res.redirect(`/listings/${listing._id}`);
+});
 
 // Error Handler
 app.all("*", (req, res, next) => {
