@@ -27,11 +27,10 @@ router.post(
 
     const listing = await Listing.findById(id);
     const review = new Review(req.body.review);
-
     listing.reviews.push(review);
     await review.save();
-    const result = await listing.save();
-    console.log(result);
+    await listing.save();
+
     res.redirect(`/listings/${listing._id}`);
   })
 );

@@ -9,6 +9,7 @@ const ExpressError = require("./utils/ExpressError.js");
 const listings = require("./routes/listing.js");
 const reviews = require("./routes/reviews.js");
 const session = require("express-session");
+const flash = require("connect-flash");
 
 // Sessions
 const sessionOptions = {
@@ -26,6 +27,7 @@ const sessionOptions = {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(session(sessionOptions));
+app.use(flash());
 
 // override with POST having ?_method=DELETE
 app.use(methodOverride("_method"));
@@ -54,6 +56,11 @@ app.get(
     res.send("Server Working...");
   })
 );
+
+app.use((req, res, next) => {
+  res.locals.success = req.flash("success");
+  next();
+});
 
 app.use("/listings", listings);
 app.use("/listings/:id/reviews", reviews);
