@@ -8,10 +8,19 @@ const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
 const listings = require("./routes/listing.js");
 const reviews = require("./routes/reviews.js");
+const session = require("express-session");
+
+// Sessions
+const sessionOptions = {
+  secret: "mysecretkey",
+  resave: false,
+  saveUninitialized: true,
+};
 
 // middlewares
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(session(sessionOptions));
 
 // override with POST having ?_method=DELETE
 app.use(methodOverride("_method"));
