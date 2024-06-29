@@ -39,7 +39,10 @@ router.get(
   wrapAsync(async (req, res) => {
     const { id } = req.params;
     const list = await Listing.findById(id).populate("reviews");
-    console.log(list);
+    if (!list) {
+      req.flash("error", "List does not exist...");
+      res.redirect("/listings");
+    }
     res.render("show", { list });
   })
 );

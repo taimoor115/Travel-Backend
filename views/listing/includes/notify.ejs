@@ -22,7 +22,7 @@
 
 <% if(success && success.length) { %>
 <div
-  class="alert alert-success alert-dismissible d-flex align-items-center col-6 offset-3"
+  class="alert alert-success alert-dismissible d-flex mt-2 align-items-center col-6 offset-3"
   role="alert"
 >
   <svg
@@ -39,6 +39,27 @@
     ><span aria-hidden="true">&times;</span></span
   >
   <strong><%= success %></strong>
+</div>
+
+<% } %> <% if(error && error.length) { %>
+<div
+  class="alert alert-danger alert-dismissible d-flex mt-2 align-items-center col-6 offset-3"
+  role="alert"
+>
+  <svg
+    class="bi flex-shrink-0 me-2 mx-2"
+    width="24"
+    height="24"
+    role="img"
+    aria-label="Danger:"
+  >
+    <use xlink:href="#exclamation-triangle-fill" />
+  </svg>
+
+  <span type="button" class="close" data-dismiss="alert" aria-label="Close"
+    ><span aria-hidden="true">&times;</span></span
+  >
+  <strong><%= error %></strong>
 </div>
 
 <% } %>
