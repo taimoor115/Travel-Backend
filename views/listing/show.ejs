@@ -5,7 +5,7 @@
     <h3 class="mt-3 text-danger"><%= list.title %></h3>
   </div>
 
-  <div class="card col-6 offset-3">
+  <div class="card listing-card col-6 offset-3">
     <img
       src="<%= list.image %>"
       class="card-img-top show_img"
@@ -82,7 +82,7 @@
               action="/listings/<%= list._id %>/reviews/<%= review.id %>?_method=DELETE"
               method="post"
             >
-              <button type="submit" class="btn btn-dark btn-sm mt-1">
+              <button type="submit" class="btn btn-outline-danger btn-sm mt-1">
                 <i class="fa-solid fa-trash"></i>
               </button>
             </form>
