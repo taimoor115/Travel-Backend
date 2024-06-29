@@ -7,9 +7,9 @@ const path = require("path");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
-const schema = require("./schema.js");
 const Review = require("./models/review.js");
-const reviewSchema = require("./schema.js");
+const listings = require("./routes/listing.js");
+const { listingSchema, reviewSchema } = require("./schema.js");
 
 // middlewares
 app.use(express.urlencoded({ extended: true }));
@@ -35,19 +35,6 @@ async function main() {
   await mongoose.connect("mongodb://127.0.0.1:27017/travel");
 }
 
-// Validation
-const validateListing = (req, res, next) => {
-  let { error } = schema.validate(req.body);
-
-  console.log(error);
-  if (error) {
-    let errMsg = error.details.map((err) => err.message).join(",");
-    throw new ExpressError(400, errMsg);
-  } else {
-    next();
-  }
-};
-
 const validateReviews = (req, res, next) => {
   let { error } = reviewSchema.validate(req.body);
 
@@ -68,79 +55,7 @@ app.get(
   })
 );
 
-// Index
-app.get(
-  "/listings",
-  wrapAsync(async (req, res) => {
-    const listing = await Listing.find();
-    res.render("home", { listing });
-  })
-);
-// Create
-app.get("/listings/new", (req, res) => {
-  res.render("new");
-});
-
-app.post(
-  "/listings",
-  validateListing,
-  wrapAsync(async (req, res, next) => {
-    const listing = req.body.listing;
-    const list = new Listing(listing);
-    await list.save();
-    res.redirect("/listings");
-  })
-);
-
-// Edit
-
-app.get(
-  "/listings/:id/edit",
-  wrapAsync(async (req, res) => {
-    const { id } = req.params;
-    const listing = await Listing.findById(id);
-    console.log(listing);
-    res.render("edit", { listing });
-  })
-);
-
-// Update
-app.patch(
-  "/listings/:id",
-  validateListing,
-  wrapAsync(async (req, res) => {
-    const { id } = req.params;
-    const listing = req.body.listing;
-    await Listing.findByIdAndUpdate(id, listing, {
-      new: true,
-      runValidators: true,
-    });
-    res.redirect("/listings");
-  })
-);
-
-// Delete
-app.delete(
-  "/listings/:id",
-  wrapAsync(async (req, res) => {
-    const { id } = req.params;
-    await Listing.findByIdAndDelete(id, { new: true });
-    res.redirect("/listings");
-  })
-);
-
-// Show / Read
-
-app.get(
-  "/listings/:id",
-  wrapAsync(async (req, res) => {
-    const { id } = req.params;
-    const list = await Listing.findById(id).populate("reviews");
-    console.log(list);
-    res.render("show", { list });
-  })
-);
-
+app.use("/listings", listings);
 // Add Reviews
 
 app.post(
