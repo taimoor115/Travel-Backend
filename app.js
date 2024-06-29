@@ -124,9 +124,7 @@ app.delete(
   "/listings/:id",
   wrapAsync(async (req, res) => {
     const { id } = req.params;
-    await Listing.findByIdAndDelete(id, { new: true }).then((res) =>
-      console.log(res)
-    );
+    await Listing.findByIdAndDelete(id, { new: true });
     res.redirect("/listings");
   })
 );
@@ -159,6 +157,16 @@ app.post(
     const result = await listing.save();
     console.log(result);
     res.redirect(`/listings/${listing._id}`);
+  })
+);
+
+app.delete(
+  "/listings/:id/reviews/:reviewId",
+  wrapAsync(async (req, res) => {
+    const { id, reviewId } = req.params;
+    await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
+    await Review.findByIdAndDelete(reviewId);
+    res.redirect(`/listings/${id}`);
   })
 );
 
