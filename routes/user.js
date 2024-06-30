@@ -7,17 +7,21 @@ router.get("/signup", (req, res) => {
   res.render("users/signup");
 });
 
-router.post("/signup", async (req, res) => {
+router.post("/signup", async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
     const user = new User({
       username,
       email,
     });
-    const result = await User.register(user, password);
-    console.log(result);
-    req.flash("success", "Sign up successfully!");
-    res.redirect("/login");
+    const registeredUser = await User.register(user, password);
+    req.logIn(registeredUser, (err) => {
+      if (err) {
+        return next(err);
+      }
+      req.flash("success", "Sign up successfully!");
+      res.redirect("/listings");
+    });
   } catch (error) {
     req.flash("error", error.message);
     res.redirect("/signup");
