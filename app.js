@@ -65,6 +65,14 @@ app.get(
   })
 );
 
+app.get("/demo", async (req, res) => {
+  let fakeUser = new User({
+    username: "Test",
+    email: "fakeuser@gmail.com",
+  });
+  const result = await User.register(fakeUser, "honda125");
+  res.send(result);
+});
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
