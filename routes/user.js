@@ -33,6 +33,7 @@ router.post(
   passport.authenticate("local", {
     failureFlash: true,
     failureRedirect: "/login",
+    failureMessage: "A user with the given email is already registered",
   }),
   async (req, res) => {
     req.flash("success", "Welcome to Traveller ...");
