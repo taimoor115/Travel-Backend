@@ -104,3 +104,10 @@ body {
 .review-card {
   margin-left: 10px !important;
 }
+
+.signup {
+  margin-left: auto !important;
+}
+.logout {
+  margin-right: 5px;
+}

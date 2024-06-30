@@ -17,5 +17,15 @@
       <a class="nav-item nav-link" href="/listings">All Listings</a>
       <a class="nav-item nav-link" href="/listings/new">Add new Listings</a>
     </div>
+    <div class="navbar-nav signup">
+      <% if(!currentUser) { %>
+      <a class="nav-item nav-link active" href="/signup">Signup </a>
+      <a class="nav-item nav-link" href="/login">Login</a>
+      <% } %> <% if(currentUser) { %>
+      <a class="nav-item nav-link logout" href="/logout"
+        >Logout <i class="fa-solid fa-arrow-right-from-bracket"></i
+      ></a>
+      <% } %>
+    </div>
   </div>
 </nav>
