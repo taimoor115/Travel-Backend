@@ -10,6 +10,9 @@ const listings = require("./routes/listing.js");
 const reviews = require("./routes/reviews.js");
 const session = require("express-session");
 const flash = require("connect-flash");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const User = require("./models/user.js");
 
 // Sessions
 const sessionOptions = {
@@ -28,6 +31,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(session(sessionOptions));
 app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 // override with POST having ?_method=DELETE
 app.use(methodOverride("_method"));
