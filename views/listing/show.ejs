@@ -12,11 +12,12 @@
       alt="listing_image"
     />
     <div class="card-body mt-2">
-      <br />
-      <p class="desc"><%= list.description %></p>
-      <b>&#8377;<%= list.price.toLocaleString('en-IN') %> </b> <br />
-      <%= list.location %> <br />
-      <%= list.country %>
+      <p class="card-text"><b>Owned by:<%= list.owner.username %></b></p>
+      <p class="card-text"><%= list.description %></p>
+      <p class="card-text">
+        <b>&#8377;<%= list.price.toLocaleString('en-IN') %> </b>
+      </p>
+      <p class="card-text"><%= list.location %> <%= list.country %></p>
     </div>
   </div>
 
