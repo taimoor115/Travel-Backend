@@ -111,3 +111,7 @@ body {
 .logout {
   margin-right: 5px;
 }
+
+.ratings {
+  color: rgb(117, 114, 114) !important;
+}
