@@ -8,45 +8,17 @@ const listingController = require("../controllers/listings");
 // Index
 router.get("/", wrapAsync(listingController.index));
 // Create
-router.get("/new", isLoggedIn, (req, res) => {
-  res.render("new");
-});
+router.get("/new", isLoggedIn, listingController.renderNewForm);
 
 // Show / Read
 
-router.get(
-  "/:id",
-  wrapAsync(async (req, res) => {
-    const { id } = req.params;
-    const list = await Listing.findById(id)
-      .populate({
-        path: "reviews",
-        populate: {
-          path: "author",
-        },
-      })
-      .populate("owner");
+router.get("/:id", wrapAsync(listingController.showListing));
 
-    console.log(list);
-    if (!list) {
-      req.flash("error", "List does not exist...");
-      res.redirect("/listings");
-    }
-    res.render("show", { list });
-  })
-);
 router.post(
   "/",
   isLoggedIn,
   validateListing,
-  wrapAsync(async (req, res, next) => {
-    const listing = req.body.listing;
-    const list = new Listing(listing);
-    list.owner = req.user.id;
-    await list.save();
-    req.flash("success", "List added successfully");
-    res.redirect("/listings");
-  })
+  wrapAsync(listingController.saveListing)
 );
 
 // Edit
@@ -55,11 +27,7 @@ router.get(
   "/:id/edit",
   isLoggedIn,
   isOwner,
-  wrapAsync(async (req, res) => {
-    const { id } = req.params;
-    const listing = await Listing.findById(id);
-    res.render("edit", { listing });
-  })
+  wrapAsync(listingController.editListing)
 );
 
 // Update
@@ -68,16 +36,7 @@ router.patch(
   isLoggedIn,
   isOwner,
   validateListing,
-  wrapAsync(async (req, res) => {
-    const { id } = req.params;
-    const listing = req.body.listing;
-    await Listing.findByIdAndUpdate(id, listing, {
-      new: true,
-      runValidators: true,
-    });
-    req.flash("success", "List updated successfully");
-    res.redirect(`/listings/${id}`);
-  })
+  wrapAsync(listingController.updateListing)
 );
 
 // Delete
@@ -85,12 +44,7 @@ router.delete(
   "/:id",
   isLoggedIn,
   isOwner,
-  wrapAsync(async (req, res) => {
-    const { id } = req.params;
-    await Listing.findByIdAndDelete(id, { new: true });
-    req.flash("success", "List deleted successfully");
-    res.redirect("/listings");
-  })
+  wrapAsync(listingController.destroy)
 );
 
 module.exports = router;
