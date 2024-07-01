@@ -39,6 +39,7 @@
 
   <div class="col-8 offset-3">
     <hr />
+    <% if(currentUser) { %>
     <h4>Leave a comment</h4>
     <form
       action="/listings/<%= list.id %>/reviews"
@@ -75,6 +76,8 @@
       </div>
     </form>
     <hr />
+    <% } %>
+
     <h4><b>All Reviews</b></h4>
     <div class="row">
       <%for(let review of list.reviews) { %>
@@ -82,14 +85,17 @@
       <div class="card col-5 mb-3 review-card ms-3">
         <div class="card-body">
           <div class="card-title d-flex justify-content-between">
-            <p>Jone Doe</p>
+            <b>@<%= review.author.username %></b>
             <form
               action="/listings/<%= list._id %>/reviews/<%= review.id %>?_method=DELETE"
               method="post"
             >
+              <% if(currentUser && currentUser._id.equals(review.author._id))
+              {%>
               <button type="submit" class="btn btn-outline-danger btn-sm mt-1">
                 <i class="fa-solid fa-trash"></i>
               </button>
+              <% } %>
             </form>
           </div>
           <p class="card-text"><%= review.comment %></p>
