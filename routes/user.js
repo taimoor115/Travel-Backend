@@ -3,31 +3,12 @@ const router = express.Router();
 const User = require("../models/user");
 const passport = require("passport");
 const { saveRedirectUrl } = require("../middleware");
+const userController = require("../controllers/user");
+const user = require("../models/user");
 
-router.get("/signup", (req, res) => {
-  res.render("users/signup");
-});
+router.get("/signup", userController.signupForm);
 
-router.post("/signup", async (req, res, next) => {
-  try {
-    const { username, email, password } = req.body;
-    const user = new User({
-      username,
-      email,
-    });
-    const registeredUser = await User.register(user, password);
-    req.logIn(registeredUser, (err) => {
-      if (err) {
-        return next(err);
-      }
-      req.flash("success", "Sign up successfully!");
-      res.redirect("/listings");
-    });
-  } catch (error) {
-    req.flash("error", error.message);
-    res.redirect("/signup");
-  }
-});
+router.post("/signup", userController.signup);
 
 router.get("/login", (req, res) => {
   res.render("users/login");
@@ -41,11 +22,7 @@ router.post(
     failureRedirect: "/login",
     failureMessage: "A user with the given email is already registered",
   }),
-  async (req, res) => {
-    req.flash("success", "Welcome to Traveller ...");
-    let redirectUrl = res.locals.redirectUrl || "/listings";
-    res.redirect(redirectUrl);
-  }
+  userController.login
 );
 
 router.get("/logout", (req, res, next) => {
