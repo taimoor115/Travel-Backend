@@ -42,7 +42,6 @@ router.get(
     const list = await Listing.findById(id)
       .populate("reviews")
       .populate("owner");
-
     if (!list) {
       req.flash("error", "List does not exist...");
       res.redirect("/listings");
