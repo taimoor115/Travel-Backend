@@ -1,4 +1,5 @@
 const Listing = require("../models/listing");
+const { login } = require("./user");
 
 module.exports.index = async (req, res) => {
   const listing = await Listing.find();
@@ -28,9 +29,12 @@ module.exports.showListing = async (req, res) => {
 };
 
 module.exports.saveListing = async (req, res, next) => {
+  const url = req.file.path;
+  const filename = req.file.filename;
   const listing = req.body.listing;
   const list = new Listing(listing);
   list.owner = req.user.id;
+  list.image = { url, filename };
   await list.save();
   req.flash("success", "List added successfully");
   res.redirect("/listings");
