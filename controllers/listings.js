@@ -1,5 +1,4 @@
 const Listing = require("../models/listing");
-const { login } = require("./user");
 
 module.exports.index = async (req, res) => {
   const listing = await Listing.find();
@@ -43,16 +42,27 @@ module.exports.saveListing = async (req, res, next) => {
 module.exports.editListing = async (req, res) => {
   const { id } = req.params;
   const listing = await Listing.findById(id);
-  res.render("edit", { listing });
+
+  let originalUrl = listing.image.url;
+  originalUrl = originalUrl.replace("/upload", "/upload/h_150,w_250");
+  console.log(originalUrl);
+  res.render("edit", { listing, originalUrl });
 };
 
 module.exports.updateListing = async (req, res) => {
   const { id } = req.params;
   const listing = req.body.listing;
-  await Listing.findByIdAndUpdate(id, listing, {
+  let updatedList = await Listing.findByIdAndUpdate(id, listing, {
     new: true,
     runValidators: true,
   });
+
+  if (typeof req.file !== "undefined") {
+    const url = req.file.path;
+    const filename = req.file.filename;
+    updatedList.image = { url, filename };
+    await updatedList.save();
+  }
   req.flash("success", "List updated successfully");
   res.redirect(`/listings/${id}`);
 };
