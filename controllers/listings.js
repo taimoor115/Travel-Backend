@@ -42,6 +42,10 @@ module.exports.saveListing = async (req, res, next) => {
 module.exports.editListing = async (req, res) => {
   const { id } = req.params;
   const listing = await Listing.findById(id);
+  if (!listing) {
+    req.flash("error", "Listing you requested for doesn't exist");
+    req.redirect("/listings");
+  }
 
   let originalUrl = listing.image.url;
   originalUrl = originalUrl.replace("/upload", "/upload/h_150,w_250");
