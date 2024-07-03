@@ -18,6 +18,19 @@ const listingSchema = new Schema({
     type: Number,
     min: 1,
   },
+  category: {
+    type: String,
+    enum: [
+      "Rooms",
+      "Iconic Cities",
+      "Mountains",
+      "Castles",
+      "Amazing Pool",
+      "Camping",
+      "Farms",
+      "Arctic",
+    ],
+  },
   location: {
     type: String,
   },

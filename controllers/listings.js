@@ -32,6 +32,7 @@ module.exports.saveListing = async (req, res, next) => {
   const filename = req.file.filename;
   const listing = req.body.listing;
   const list = new Listing(listing);
+
   list.owner = req.user.id;
   list.image = { url, filename };
   await list.save();
@@ -49,7 +50,6 @@ module.exports.editListing = async (req, res) => {
 
   let originalUrl = listing.image.url;
   originalUrl = originalUrl.replace("/upload", "/upload/h_150,w_250");
-  console.log(originalUrl);
   res.render("edit", { listing, originalUrl });
 };
 

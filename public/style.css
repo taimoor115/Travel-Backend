@@ -115,3 +115,12 @@ body {
 .ratings {
   color: rgb(117, 114, 114) !important;
 }
+
+.filter {
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.filter:hover {
+  opacity: 1;
+}
