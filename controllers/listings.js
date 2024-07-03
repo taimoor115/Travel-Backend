@@ -1,12 +1,14 @@
 const Listing = require("../models/listing");
 
 module.exports.index = async (req, res) => {
-  const { filter } = req.query;
+  const { filter, search } = req.query;
 
   console.log(filter);
   let listing;
   if (filter && filter != "All") {
     listing = await Listing.find({ category: filter });
+  } else if (search) {
+    listing = await Listing.find({ title: { $regex: search } });
   } else {
     listing = await Listing.find();
   }

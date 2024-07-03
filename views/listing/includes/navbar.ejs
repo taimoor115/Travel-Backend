@@ -1,32 +1,53 @@
-<nav class="navbar navbar-expand-sm navbar-light border-bottom sticky-top">
-  <a class="navbar-brand" href="/listings"
-    ><i class="fa-solid fa-compass"></i
-  ></a>
-  <button
-    class="navbar-toggler"
-    type="button"
-    data-toggle="collapse"
-    data-target="#navbarNavAltMarkup"
-    aria-controls="navbarNavAltMarkup"
-    aria-expanded="false"
-    aria-label="Toggle navigation"
-  >
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse bg-white" id="navbarNavAltMarkup">
-    <div class="navbar-nav">
-      <a class="nav-item nav-link" href="/listings">Explore</a>
-    </div>
-    <div class="navbar-nav signup">
-      <a class="nav-item nav-link" href="/listings/new">Airbnb your home</a>
-      <% if(!currentUser) { %>
-      <a class="nav-item nav-link active" href="/signup"><b>Signup </b></a>
-      <a class="nav-item nav-link" href="/login"><b>Login</b></a>
-      <% } %> <% if(currentUser) { %>
-      <a class="nav-item nav-link logout" href="/logout"
-        ><b>Logout </b><i class="fa-solid fa-arrow-right-from-bracket"></i
-      ></a>
+<body>
+  <nav class="navbar navbar-expand-sm navbar-light border-bottom sticky-top">
+    <a class="navbar-brand" href="/listings"
+      ><i class="fa-solid fa-compass"></i
+    ></a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse bg-white" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link" href="/listings">Explore</a>
+      </div>
+
+      <% if(currentUser || showSearch){ %>
+      <div class="navbar-nav search">
+        <form class="d-flex" class="needs-validation" novalidate>
+          <input
+            class="form-control input-search me-2"
+            type="search"
+            placeholder="Search"
+            aria-label="Search"
+            required
+            name="search"
+          />
+          <button class="btn btn-outline-danger btn-search" type="submit">
+            Search
+          </button>
+        </form>
+      </div>
       <% } %>
+      <div class="navbar-nav signup">
+        <a class="nav-item nav-link" href="/listings/new">Airbnb your home</a>
+        <% if(!currentUser) { %>
+        <a class="nav-item nav-link active" href="/signup"><b>Signup </b></a>
+        <a class="nav-item nav-link" href="/login"><b>Login</b></a>
+        <% } %> <% if(currentUser) { %>
+        <a class="nav-item nav-link logout" href="/logout"
+          ><b>Logout </b><i class="fa-solid fa-arrow-right-from-bracket"></i
+        ></a>
+        <% } %>
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
+  <script src="/script.js"></script>
+</body>

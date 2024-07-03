@@ -46,6 +46,7 @@ app.engine("ejs", ejsMate);
 app.set("views", path.join(__dirname, "views/listing"));
 app.use(express.static(path.join(__dirname, "/public")));
 
+const dbURL = process.env.ATLAS_DB_URL;
 // Db Connection
 main()
   .then(() => {
@@ -55,13 +56,20 @@ main()
     console.log(err);
   });
 async function main() {
-  await mongoose.connect("mongodb://127.0.0.1:27017/travel");
+  await mongoose.connect(dbURL);
 }
 
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   res.locals.currentUser = req.user;
+  res.locals.heading = req.query.filter;
+  if (req.path == "/listings") {
+    res.locals.showSearch = req.path;
+  } else {
+    res.locals.showSearch = undefined;
+  }
+  console.log("Hello", req.query.filter);
   next();
 });
 

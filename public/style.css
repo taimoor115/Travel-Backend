@@ -93,16 +93,15 @@ body {
   font-size: 40px !important;
 }
 
-.show_img {
-  height: 45vh;
-}
-
 .desc {
   color: rgb(90, 87, 87) !important;
 }
 
 .review-card {
   margin-left: 10px !important;
+}
+.show_img {
+  height: 50vh;
 }
 
 .signup {
@@ -119,8 +118,30 @@ body {
 .filter {
   cursor: pointer;
   opacity: 0.6;
+  font-size: 13px;
 }
 
 .filter:hover {
   opacity: 1;
+}
+
+.taxes {
+  color: rgb(63, 62, 62) !important;
+  font-weight: 800;
+  display: none;
+}
+
+.search {
+  margin-left: auto;
+}
+
+.input-search {
+  border-radius: 20px !important;
+  padding: 0.5rem 2rem 0.5rem 3rem !important;
+}
+
+.btn-search {
+  padding: 0 1rem 0 1rem !important;
+  border-radius: 20px !important;
+  margin-left: 5px;
 }

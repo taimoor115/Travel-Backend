@@ -32,3 +32,17 @@ function filterByCategory(category) {
   // Submit the form
   document.getElementById("filterForm").submit();
 }
+
+document
+  .getElementById("flexSwitchCheckDefault")
+  .addEventListener("click", () => {
+    let taxes = document.getElementsByClassName("taxes");
+
+    for (let i of taxes) {
+      if (i.style.display != "inline") {
+        i.style.display = "inline";
+      } else {
+        i.style.display = "none";
+      }
+    }
+  });
