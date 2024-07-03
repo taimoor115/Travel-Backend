@@ -1,7 +1,15 @@
 const Listing = require("../models/listing");
 
 module.exports.index = async (req, res) => {
-  const listing = await Listing.find();
+  const { filter } = req.query;
+
+  console.log(filter);
+  let listing;
+  if (filter && filter != "All") {
+    listing = await Listing.find({ category: filter });
+  } else {
+    listing = await Listing.find();
+  }
   res.render("home", { listing });
 };
 

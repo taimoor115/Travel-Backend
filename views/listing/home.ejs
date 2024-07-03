@@ -1,43 +1,70 @@
 <% layout("/layout/boilerplate") %>
 
-<div class="d-flex justify-content-center">
-  <div class="mx-3 mt-4 text-center filter">
-    <i class="fa-solid fa-fire"></i>
-    <p>Trending</p>
+<form id="filterForm" action="/listings" method="get">
+  <div class="d-flex justify-content-center">
+    <div class="mx-3 mt-4 text-center filter" onclick="filterByCategory('All')">
+      <i class="fa-solid fa-fire"></i>
+      <p>Trending</p>
+    </div>
+    <div
+      class="mx-3 mt-4 text-center filter"
+      onclick="filterByCategory('Rooms')"
+    >
+      <i class="fa-solid fa-bed"></i>
+      <p>Rooms</p>
+    </div>
+    <div
+      class="mx-3 mt-4 text-center filter"
+      onclick="filterByCategory('Iconic Cities')"
+    >
+      <i class="fa-solid fa-city"></i>
+      <p>Iconic Cities</p>
+    </div>
+    <div
+      class="mx-3 mt-4 text-center filter"
+      onclick="filterByCategory('Mountains')"
+    >
+      <i class="fa-solid fa-mountain"></i>
+      <p>Mountains</p>
+    </div>
+    <div
+      class="mx-3 mt-4 text-center filter"
+      onclick="filterByCategory('Castles')"
+    >
+      <i class="fa-brands fa-fort-awesome"></i>
+      <p>Castles</p>
+    </div>
+    <div
+      class="mx-3 mt-4 text-center filter"
+      onclick="filterByCategory('Amazing Pool')"
+    >
+      <i class="fa-solid fa-person-swimming"></i>
+      <p>Amazing Pool</p>
+    </div>
+    <div
+      class="mx-3 mt-4 text-center filter"
+      onclick="filterByCategory('Camping')"
+    >
+      <i class="fa-solid fa-tree"></i>
+      <p>Camping</p>
+    </div>
+    <div
+      class="mx-3 mt-4 text-center filter"
+      onclick="filterByCategory('Farms')"
+    >
+      <i class="fa-solid fa-cow"></i>
+      <p>Farms</p>
+    </div>
+    <div
+      class="mx-3 mt-4 text-center filter"
+      onclick="filterByCategory('Arctic')"
+    >
+      <i class="fa-solid fa-snowflake"></i>
+      <p>Arctic</p>
+    </div>
   </div>
-  <div class="mx-3 mt-4 text-center filter">
-    <i class="fa-solid fa-bed"></i>
-    <p>Rooms</p>
-  </div>
-  <div class="mx-3 mt-4 text-center filter">
-    <i class="fa-solid fa-city"></i>
-    <p>Iconic Cities</p>
-  </div>
-  <div class="mx-3 mt-4 text-center filter">
-    <i class="fa-solid fa-mountain"></i>
-    <p>Mountains</p>
-  </div>
-  <div class="mx-3 mt-4 text-center filter">
-    <i class="fa-brands fa-fort-awesome"></i>
-    <p>Castles</p>
-  </div>
-  <div class="mx-3 mt-4 text-center filter">
-    <i class="fa-solid fa-person-swimming"></i>
-    <p>Amazing Pool</p>
-  </div>
-  <div class="mx-3 mt-4 text-center filter">
-    <i class="fa-solid fa-tree"></i>
-    <p>Camping</p>
-  </div>
-  <div class="mx-3 mt-4 text-center filter">
-    <i class="fa-solid fa-cow"></i>
-    <p>Farms</p>
-  </div>
-  <div class="mx-3 mt-4 text-center filter">
-    <i class="fa-solid fa-snowflake"></i>
-    <p>Arctic</p>
-  </div>
-</div>
+  <input type="hidden" id="categoryInput" name="filter" value="" />
+</form>
 
 <h3 class="mt-4 mb-4">All Listings</h3>
 <div class="row row-cols-lg-3 row-cols-md-3 row-cols-sm-1">

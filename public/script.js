@@ -24,3 +24,11 @@
     false
   );
 })();
+
+function filterByCategory(category) {
+  // Set the value of the hidden input field to the selected category
+  document.getElementById("categoryInput").value = category;
+
+  // Submit the form
+  document.getElementById("filterForm").submit();
+}
